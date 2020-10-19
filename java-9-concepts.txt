@@ -1,0 +1,34 @@
+- Install the JDK 9 
+- Change the JAVA_HOME environment variable to jdk folder
+- We want to use binary exe files so add the foder %JAVA_HOME%/bin , this will allow all the files accesible through cmd from any location
+
+
+================JSHELL======================
+- A REPL for java programming language
+- provides a basic interactive tool where a dev can execute expressions (like str.equals("messi")), statmenets code ending with ; is called statment
+- We can save code session writeen and then rerun it later on other JDK, or same JDK
+- REPL meaning : Read evaluate Print loop, We can define variebles, evaluate expresions,statments without opening IDE
+- The main benefits are:
+	a. To write some code and have fun and see some results randomly we do not have to open IDE and write some boier plate code like class, main method and all
+	b. For new learners this will be easy to focus on programming until they gradually learn IDE and other things related to it
+	c. Reduces writing boier plate code , and instead we can foxus on expression ,statments,logic then put that in main project
+	d. no need to import, no semicolon, less verbose code, very less bolier plate code -> greate for learning and playing
+	e. We can bypass the exception handling code unlike IDE
+- To see what all imports are there for code -> /imports
+- All commsnds starts with / eg /imports , /help
+- /history : shows all the commnsd whetehr it was help command , /command , code snippet anythings
+- /list: shows all the code snippets , like method, print satment etc: we can list the snippet and use command /cnippetid to execute the code snipped
+- /vars: shows applicable variables from code snippets 
+- Cntrl A -> goes the jshel typing cursor to left most , Cntrl -E to go till end of line 
+	-> similar to home and end  used in IDE/text editor
+- Contrl R to search for any text in history -> just like linux 
+
+- Commands related to setting editor
+	- /set editor notepad++.exe : Set editor as notepad++ for the session 
+	- /set editor -default: set to default
+	- /set editor -retian notepad++.ex : To retain accorss newer sessions
+
+- To Load vars,clases,config forma  file
+	-> jshell -v --startup PRINTING DEFAULT startupsFile.jsh : Loads with class/vars from the file startupsFile.jsh 
+		and also create easy methods for printing: This is very useful as we do not have to type System.out.println instead just call pre created method print
+- /open jsh file -> import the jsh file once jshell is running, its better than the --startup command while runing jshell -v command
