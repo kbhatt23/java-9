@@ -32,3 +32,135 @@
 	-> jshell -v --startup PRINTING DEFAULT startupsFile.jsh : Loads with class/vars from the file startupsFile.jsh 
 		and also create easy methods for printing: This is very useful as we do not have to type System.out.println instead just call pre created method print
 - /open jsh file -> import the jsh file once jshell is running, its better than the --startup command while runing jshell -v command
+
+
+=========MODULES==============
+- Module can add encapsulations
+benefits:
+a. We can hide/show package to reflection
+b. we can add abstraction to layers and pick and cherry pick JDK modules so that size of jdk is very less -> good for microserivces
+c. scale down monolithic jdk into smaller modules whihc then can be imported/reqruies based on need
+
+- we need to create one modul-info.jav with multiple modules -> each module and exports -> show packge to other modules
+	or reruires another module
+- we can use service loader - > uses in consumer and works Interface packge with childOAckge.child class 
+	-> this way in consumer we can have just interface and its impementation classes will be loaded by service loader
+	a. uses interface package name in consumer -> requires for interface module already present
+	b. works interfacepackge.interfacename with implemnentor packge.classname  -> reqriures for interface module already present
+	c. requires of interface module already present -> put uses packge of interface.name of interface
+	
+
+- We can use open on module level to allo all the classes to allow for reflection usage 
+- or else we cna put opens on package level lik  open package name or even alow reflection for specific package to specific module
+	like -> opens providepackage moduleNMameOfConsumer
+
+
+================Jlinker===============
+- used to create custom JRE -> it requries moules to be present and available
+
+- Command to excute sample JRE using jlink
+- %JAVA_HOME%/bin/jlink --module-path "%JAVA_HOME%\jmods";bin --add-modules sampleJavaProjectForLearning --launcher PROVIDER=sampleJavaProjectForLearning/runner.Main --output jre
+
+or more precisely: 
+   jlink --module-path "%JAVA_HOME%\jmods";bin --add-modules jlinkerSample --launcher PROVIDER=jlinkerSample/runner.Main --output jre
+
+- Java 9 projects can use both java modules path as well as class path both
+	-> internally it converts the class path into unnamed module whihc can not be shared to any other project
+- internal jdl apis are encapsulated menaing converted into modules
+	-> based on its usage they are coupled together
+- Modules allow transitive depdencies automatic unlike old java jar concept
+	-> we used to add all the transitive dependenct jar manually
+	-> if tranistive depdnecies are not added in running project then compiler wont cuase issue,
+	but at runtime if that specfic code will execute will throw runtime error named classnotfoundexception -> 
+	-> tis is not good as we should have fail fast mecanism
+- Modules not only allow transitive depenencie but also is fail fast
+	-> in case one dpednet jar got rmeoved the application wont even run
+	-> this is better that failing at runtime and failing very late in jar classpath way using old java
+
+- Code inside unnamed module can talk to code present inside unnamed module.
+- Code inside automatic module can use code present in unnamed as well as automatic module
+- But unnamed module can not use cod epresent in automatic module
+
+- we need to export packages for custom built modules , but for automatic modules and unnamed modules all export is automatic 
+
+- Command to find any depdnecey of any jar to jdk internal apis
+	jdeps --jdk-internals gson-2.2.2.jar
+- list java modules consumed by any java jar
+	-> jdeps -summary gson-2.2.2.jar
+- To create jar file -> jar --create --file lib/person.jar -C bin .  -> person.jar created in lib folder
+
+- A jar gets added to classpth are pulled into module named unnamed module -> it can not use code of custom module or automatic module
+- IF we are adding jar into module apth it gets pulled into automatic module -> in custom module we need to require this module to get useful
+
+- IF we have source code of some jar/or we have some java project with soruce code
+	-> we can use jdeps command to create a jar and have imported module-info.java having module data
+	-> this way we can import the jar as module path and transitive dependencies are autiomatically pulled in consumer module project
+
+- requires moduleName : this imports the exported package to our module but do not export these packages to consumer of the project
+- requires transitive moduleName : this imports all the dependencies of moduleName and also exports all these depdneceis , so that other consumer do not have to import it/requires it
+
+
+===============STREAMS UPGRADE============
+- we have methodss like limit and skip whihc are based on count, same functionality are addec but based on predicate condition
+	-> both are shortcircuting methods
+
+- takeWhile is compatriot of limit method but do not use count
+	-> keep on processing the item in stream until the condition is true, once any item returns false , the processing stops for other items in stream
+- mostly used for collections that store insertion order like list, linkedhasthet, linkedhashnap etc
+	-> as skipping and processing is based on condition
+
+- methods like limit,skip,takewhile,dropwhile are shor circuiting methods
+	-> hence heavily used with infinite streams like Strea.iterate or Stream.generate(supplier)
+	-> filter can not be used here as it is not shortcircuting and loops never brekas for inifinte stream
+- To hanle such inifinite stream it provides another overloaded iterate method
+
+==============COLLECTION UPGRADE=========
+- Added new factory methods to create unmodifiable list/set/map from fixed set of items passed
+	-> it will be unmodifable meaning can not add/remove items or update item at any index
+List: overloaded of methods till 10 different variables(for performance), and for more than that var args method
+Properties:
+	a. We can not insert null in any of the factory methods -> null pointer exception
+	b. in set and map , we can not pass duplicate item and duplicate key othereise runtime exception will occur
+	c. we can not add/remove or modify any item in collection
+
+- immutable collection remain unmodifable even after serializationa dn deserialization process
+
+- Try with resources changes
+	-> in case we already have a resource object we can now use that in try with resource
+	-> only constraint is that the resource variable have to be finla or effectively final -> meaning it should not be modified inisde the method
+	-> alos outside resource and reosurce created in the try block both can work together
+
+- Diamond operator -> <> was used in generics to have automatic typed reference eg:
+	pior to java 7 -> List<String> st  =new ArrayList<String>();  -> this was neccesarry
+	but in jdk 7 we can skip reference type on object creation side as it can be type referred by compiler
+	eg : List<String> st  =new ArrayList<>();
+	-> in JDK9 same is added to anonymous inner class with generic type
+
+
+==========PROCESS API=============
+- Java 9 added new features in process apis making it easier to 
+	-create process , start it , get future object on completion , destory process
+	- earlier only process created by java can be dstroyed but now any process can be removed
+
+
+===========HTTP2==============
+- Http 1 had below issues:
+	a. It supports only one request per connection
+		-> in todays world since we have so many resources like css, images , it create new connection based on new request one by one
+		-> hence image/content will download one by one and dipslay and hence it will be slow to load in nowaday
+	b. It is created to support texts and not other things like files,image
+	c. It is blocking
+HTTP2 benefits
+	a. It support multi ple request in same connection -> and hence multiple css/images can be processed paralelly
+	b. Support async mode of transfer of data
+	c. Supports file based conent using stream/framework
+	d. Server can forcefully pass the content to cache of brwoser making fewer request calls and henc emakoing it fast
+
+- HTTP2 Client provides backwar compantibilit to http1 , better than httpurlconnection
+- code is easier to write
+- supports both sync and async mode ,supports file connection
+
+Classes: All are part of jdk.incubator packge -> need to import module
+	a. HttpClient: Since in http2 we can have multiple requests in same connection , one client can handle nay number of requests
+	b. HttpRequest : We need to tell the type of request like get  post, put headers/request body etc, 
+	c. HttResponse: response

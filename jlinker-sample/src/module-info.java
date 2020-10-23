@@ -1,0 +1,4 @@
+module jlinkerSample {
+	
+	exports runner;
+}

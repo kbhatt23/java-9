@@ -2,8 +2,11 @@ package sample;
 
 import java.util.List;
 
+import sampleinternal.InternalListSupplier;
+
 public class HelloList {
-	public static void main(String[] args) {
-		System.out.println(List.of("sita-ram","radhe-shyam"));
+	public static List<String> getNames(){
+		System.out.println("hello list calling supplier to get list");
+		return InternalListSupplier.supplyList();
 	}
 }
