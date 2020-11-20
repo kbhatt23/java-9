@@ -1,0 +1,53 @@
+- new features in java 9 to be discussed:
+a. Jshell(REPL)
+b. Java modules(JPMS)
+c. Jlink
+d. Collections factory method
+e. Stream api enhancements
+f. Optional enahancements
+g. try with resource enhancements
+h. http2 client
+i. process api updates
+j. private methods in interfaces
+k. safe var args
+l. G 1 garbage collector updates
+m. Diamond operator in anonymous inner and method inner classes 
+
+
+=================JSHELL=================
+- Its a REPL -> Read evaludate Print and Loop
+- Already present in langiuages like python
+- Any expression that have something to return will be automatically saved to a variable with name $x if no variable is assinged to taht statmenet exclusilvely in code
+	eg 1+1 will get store in $x with value 2 but int x = 2+2 will not create another variable but x will store value 4 
+	such auto genrated variables are called scrathch variable
+
+- Any expression that have void return like system.out.println will not be stored in any variable
+- we cna get info about any scratch variable using -> variable name -> thats it
+- all variables stored in jshell are public, its becuase jshell is a playing space and not a place of writing actual code for projects
+	hence there are freedoms
+	a. not using ";" at end of statmeent if it is single line, if more than one line expression is there thne we need to add ";"
+	b. all variables/methods/claasses are public
+	c. no try vatch
+	d. auto scrathc bvariable creation and storage etc
+	e. there are default auto imports like java.util, jva.regex,java.nio etc, we can also add out own, all these imports are global across jshell
+
+- /list: displays all th code we have typed in
+- /history: displays all code w ehave typed in as well as commands like /help , /vars etc
+
+- if we are creating a metohd that calls another method that do not exit in jshell, it creates the main method
+	, however we ownt be able to call the method until the inner method is created;
+
+- Short cuts
+	shift -> tab - i for auto imports
+	shift -> tab -> v for creating auto variables -> saves typing time
+
+- Jlinker can be used to create custom JRE based on modules needed
+
+Steps in jlinker:
+a. compile class using command: -> create class and modules in out folder
+	javac -d out src\samplerunner\Main.java
+	javac -d out src\module-info.java
+b. test above created .class folders in out folde rusing command
+	java --module-path out -m sampleJlinkerModule/samplerunner.Main
+c. Create cusokt jre :
+	jlink --module-path "%JAVA_HOME%\jmods";out --add-modules sampleJlinkerModule --output sampleJre

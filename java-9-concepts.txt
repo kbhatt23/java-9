@@ -64,6 +64,9 @@ c. scale down monolithic jdk into smaller modules whihc then can be imported/req
 or more precisely: 
    jlink --module-path "%JAVA_HOME%\jmods";bin --add-modules jlinkerSample --launcher PROVIDER=jlinkerSample/runner.Main --output jre
 
+without launcher:
+   jlink --module-path "%JAVA_HOME%\jmods";out --add-modules sampleJlinkerModule --output sampleJre
+
 - Java 9 projects can use both java modules path as well as class path both
 	-> internally it converts the class path into unnamed module whihc can not be shared to any other project
 - internal jdl apis are encapsulated menaing converted into modules
@@ -141,6 +144,8 @@ Properties:
 - Java 9 added new features in process apis making it easier to 
 	-create process , start it , get future object on completion , destory process
 	- earlier only process created by java can be dstroyed but now any process can be removed
+- Java 9 adds Processhandle class to list all the process/ get process if id is know, or create new process in java code
+- Java 9 adds ProcessBuilder class to help create new process , pass the arguments and commands to it like opening notepade.exe
 
 
 ===========HTTP2==============
@@ -164,3 +169,11 @@ Classes: All are part of jdk.incubator packge -> need to import module
 	a. HttpClient: Since in http2 we can have multiple requests in same connection , one client can handle nay number of requests
 	b. HttpRequest : We need to tell the type of request like get  post, put headers/request body etc, 
 	c. HttResponse: response
+
+Kind of status codes:
+
+- 1xx: : Information related , like payment site give info payment is in progress please wait etc
+- 2xx:  Sucess scenarios
+- 3xx: Redireced , meaning site was down and it redirected to another backup site
+- 4xx : error becuas eof client
+- 5xx: error becuas eof server issue 

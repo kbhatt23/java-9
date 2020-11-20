@@ -12,7 +12,7 @@ module sampleJavaProjectForLearning {
 	
 	//opening only for reflection and not available at compile time
 	//as of now opening for all modules who requires this module
-	opens reflectiononly;
+	opens reflectiononly to moduleConsumer;
 	//exports reflectiononly;
 	
 	exports runner;

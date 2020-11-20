@@ -1,0 +1,3 @@
+module sampleJlinkerModule{
+	exports samplerunner;
+}
